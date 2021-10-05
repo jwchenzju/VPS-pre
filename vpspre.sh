@@ -27,6 +27,7 @@ cfgfirewall() {
 installfail2ban() {
     yum -y install epel-release
     yum install fail2ban
+    systemctl enable fail2ban
     echo "fail2ban installation finished"
 }
 
