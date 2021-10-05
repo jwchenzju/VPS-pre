@@ -167,7 +167,7 @@ menu() {
             echo -e "$RED 请选择正确的操作！${PLAIN}"
             exit 1
             ;;
-    esac
+#    esac
 }
 
 action=$1
@@ -180,4 +180,4 @@ case "$action" in
         echo " 参数错误"
         echo " 用法: `basename $0` [menu|install]"
         ;;
-esac
+#esac
