@@ -113,9 +113,9 @@ EOF
 
 cfgdns() {
     echo "
-    DNS1=8.8.8.8
-    DNS2=8.8.4.4
-    DNS3=1.1.1.1" >> /etc/sysconfig/network-scripts/ifcfg-eth0
+DNS1=8.8.8.8
+DNS2=8.8.4.4
+DNS3=1.1.1.1" >> /etc/sysconfig/network-scripts/ifcfg-eth0
     echo "DNS changed to google and cloudflare"
 
 }
