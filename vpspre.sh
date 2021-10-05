@@ -142,32 +142,4 @@ install() {
     cfgddos
 }
 
-
-
-
-menu() {
-    echo -e "  ${GREEN}1.${PLAIN}  install VPS pre-environment"
-    echo " Only for private use, do not try to use if you are not clear"
-    echo -e "  ${GREEN}0.${PLAIN} 退出"
-    echo 
-    echo -n " 当前状态/present status："
-    statusText
-    echo 
-
-    read -p " 请选择操作/please select[0-2]：" answer
-    case $answer in
-        0)
-            exit 0
-            ;;
-        1)
-            install
-            ;;
-            
-        *)
-            echo -e "$RED 请选择正确的操作！${PLAIN}"
-            exit 1
-            ;;
-#    esac
-}
-
-action=menu
+action=install
