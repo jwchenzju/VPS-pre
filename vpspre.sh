@@ -30,7 +30,7 @@ installfail2ban() {
 }
 
 cfgssr2ban() {
-    cat > /etc/fail2ban/filter.d/shadowsocks.conf << EOF
+    cat > /etc/fail2ban/filter.d/shadowsocks.conf << -EOF
     [INCLUDES]
     before = common.conf
     [Definition]
@@ -41,7 +41,7 @@ cfgssr2ban() {
 }
 
 cfgjaillocal() {
-    cat > /etc/fail2ban/jail.local << EOF
+    cat > /etc/fail2ban/jail.local << -EOF
     [DEFAULT]
     sshd_log= /var/log/secure
     [sshd]
@@ -61,7 +61,7 @@ cfgjaillocal() {
 
 mkjason() {
     mkdir /etc/shadowsocks-r
-    cat > /etc/shadowsocks-r/config.json << EOF
+    cat > /etc/shadowsocks-r/config.json << -EOF
     {
         "server":"0.0.0.0",
         "server_ipv6":"::",
@@ -93,7 +93,7 @@ enlargesoft() {
 }
 
 cfglogrote() {
-    cat > /etc/logrotate.d/shadowsocksr << EOF
+    cat > /etc/logrotate.d/shadowsocksr << -EOF
     /var/log/shadowsocksr.log {
     weekly
     size 10M
