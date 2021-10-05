@@ -162,7 +162,7 @@ menu() {
     statusText
     echo 
 
-    read -p " 请选择操作/please select[0-2]：" answer
+    read -p " 请选择操作/please select[0-1]：" answer
     case $answer in
         0)
             exit 0
