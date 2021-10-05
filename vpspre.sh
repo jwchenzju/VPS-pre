@@ -170,14 +170,4 @@ menu() {
 #    esac
 }
 
-action=$1
-[[ -z $1 ]] && action=menu
-case "$action" in
-    menu|install)
-        ${action}
-        ;;
-    *)
-        echo " 参数错误"
-        echo " 用法: `basename $0` [menu|install]"
-        ;;
-#esac
+action=menu
