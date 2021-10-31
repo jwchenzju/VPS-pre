@@ -158,8 +158,6 @@ menu() {
     echo " Only for private use, do not try to use if you are not clear"
     echo -e "  ${GREEN}0.${PLAIN} 退出"
     echo 
-    echo -n " 当前状态/present status："
-    statusText
     echo 
 
     read -p " 请选择操作/please select[0-1]：" answer
