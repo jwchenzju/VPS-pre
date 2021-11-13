@@ -27,6 +27,7 @@ cfgfirewall() {
 installfail2ban() {
     yum -y install epel-release
     yum -y install fail2ban
+    systemctl daemon-reload
     systemctl enable fail2ban
     echo "fail2ban installation finished"
 }
@@ -59,7 +60,6 @@ maxretry = 1
 bantime  = 3600
 EOF
 
-    systemctl enable fail2ban
     echo "jail.local cfg finished"
 }
 
@@ -72,7 +72,7 @@ mkjason() {
     "local_address":"127.0.0.1",
     "local_port":1080,
     "port_password":{
-    "443":"o0vnvH$t^IvUh%L!",
+    "20058":"o0vnvH$t^IvUh%L!",
     "20059":"o0vnvH$t^IvUh%L!"
     },
     "timeout":120,
