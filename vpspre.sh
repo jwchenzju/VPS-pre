@@ -20,6 +20,7 @@ cfgfirewall() {
     firewall-cmd --permanent --add-port=39000-40000/udp
     firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=tcp:toport=20059
     firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=udp:toport=20059
+    firewall-cmd --reload
     systemctl enable firewalld
     echo "firewalld configuration finished"
 }
