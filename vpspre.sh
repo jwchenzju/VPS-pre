@@ -29,6 +29,7 @@ installfail2ban() {
     yum -y install epel-release
     yum -y install fail2ban
     systemctl daemon-reload
+    systemctl stop fail2ban
     systemctl enable fail2ban
     echo "fail2ban installation finished"
 }
