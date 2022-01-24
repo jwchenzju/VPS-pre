@@ -55,7 +55,7 @@ bantime  = 3600
 [shadowsocks]
 enabled = true
 filter = shadowsocks
-port = 443,20059,39000-40000
+port = 20058,20059,39000-40000
 logpath = /var/log/shadowsocksr.log
 maxretry = 1
 bantime  = 3600
