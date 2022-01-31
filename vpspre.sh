@@ -100,7 +100,7 @@ enlargesoft() {
 }
 
 cfglogrote() {
-    mkdir /etc/logrotate.d
+    yum -y install logrotate
     cat > /etc/logrotate.d/shadowsocksr <<'EOF'
 /var/log/shadowsocksr.log {
 weekly
