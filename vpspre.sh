@@ -12,8 +12,8 @@ PLAIN='\033[0m'
 cfgfirewall() {
     systemctl start firewalld
     firewall-cmd --permanent --add-port=22/tcp
-    firewall-cmd --permanent --add-port=20059/tcp
-    firewall-cmd --permanent --add-port=20059/udp
+    firewall-cmd --permanent --add-port=20058-20059/tcp
+    firewall-cmd --permanent --add-port=20058-20059/udp
     firewall-cmd --permanent --add-port=443/tcp
     firewall-cmd --permanent --add-port=443/udp
     firewall-cmd --permanent --add-port=39000-40000/tcp
