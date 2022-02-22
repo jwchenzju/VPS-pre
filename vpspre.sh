@@ -48,7 +48,6 @@ EOF
 cfgjaillocal() {
     touch /var/log/shadowsocksr.log
     cat > /etc/fail2ban/jail.local <<'EOF'
-[DEFAULT]
 [sshd]
 enabled=true
 bantime  = 3600
