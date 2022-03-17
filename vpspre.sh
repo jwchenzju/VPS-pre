@@ -113,15 +113,6 @@ EOF
     echo "logrotate for shadowsocks finished"
 }
 
-cfgdns() {
-    echo "
-DNS1=8.8.8.8
-DNS2=8.8.4.4
-DNS3=1.1.1.1" >> /etc/sysconfig/network-scripts/ifcfg-eth0
-    echo "DNS changed to google and cloudflare"
-
-}
-
 cfgddos() {
     echo "
 # TCP SYN Flood Protection
@@ -154,7 +145,6 @@ install() {
     mkjason
     enlargesoft
     cfglogrote
-    cfgdns
     cfgddos
     enkey
 }
