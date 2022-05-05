@@ -109,7 +109,6 @@ installssr(){
     yum install -y podman podman-docker
     docker pull docker.io/teddysun/shadowsocks-r:latest
     docker run -d --net host --name ssr --restart=always -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
-    echo "docker ssr finished"
 }
 
 enkey() {
@@ -117,11 +116,12 @@ enkey() {
     echo "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvCkSRujkkbvhFdBnPyyR4yrfpBE3JeIsp7T5JvJzbWURv/gyv1sj34oK3N+uusIyQfIpBKUKpLmjnX7J9ToNKJGAWUHLe/V1MZGzPi/UXjWvK/gJWgg+tf3I33u0zquS2fCw2FQdrLu7prDmb5SzuGg7Pw38xnS0Y+Dt0c7D4dce6kbdWCctxPBS74qogKexoUg9ValrU0bFiBqADYcSqoCLQZHJiF8uNxuejvTLg76L6MNaWNJsL75LnhC2mBDaWNAcKVfNnI9s/xwWFKpHZnNVkGcMtBKJ2KqaoJm+O/tDqW6pPCJ7xeTYDHJW/bSujLRc+CyMWeSCHY9V80OLdQ== imported-openssh-key" >>/root/.ssh/authorized_keys
     sed -i '/^PasswordAuthentication/s/^/#/g' /etc/ssh/sshd_config
     sed -i '/PasswordAuthentication/a\PasswordAuthentication no' /etc/ssh/sshd_config
+    update-crypto-policies --set LEGACY
 }
 
 adddocker(){
     yum -y install podman
-    
+}    
 
 install() {
     installbbr
