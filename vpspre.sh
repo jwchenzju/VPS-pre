@@ -33,30 +33,10 @@ installfail2ban() {
     echo "fail2ban installation finished"
 }
 
-cfgssr2ban() {
-    cat > /etc/fail2ban/filter.d/shadowsocks.conf <<'EOF'
-[INCLUDES]
-before = common.conf
-[Definition]
-_daemon = shadowsocks
-failregex = ^\s+ERROR\s\s\s\s+tcprelay.py:1097 can not parse header when handling connection from <HOST>:\d+$
-ignoreregex =
-EOF
-    echo "ssr2ban cfg finished"
-}
-
 cfgjaillocal() {
-    touch /var/log/shadowsocksr.log
     cat > /etc/fail2ban/jail.local <<'EOF'
 [sshd]
 enabled=true
-bantime  = 3600
-[shadowsocks]
-enabled = true
-filter = shadowsocks
-port = 20058,20059,39000-40000
-logpath = /var/log/shadowsocksr.log
-maxretry = 1
 bantime  = 3600
 EOF
 
@@ -140,7 +120,6 @@ enkey() {
 install() {
     cfgfirewall
     installfail2ban
-    cfgssr2ban
     cfgjaillocal
     mkjason
     enlargesoft
