@@ -112,7 +112,7 @@ installssr(){
     podman generate systemd --restart-policy always -t 1 -n -f ssr
     mv container-ssr.service /etc/systemd/system/
     systemctl daemon-reload
-    restorecon -RvF container-ssr.service
+    restorecon -RvF /etc/systemd/system/container-ssr.service
     systemctl enable container-ssr.service --now
 }
 
