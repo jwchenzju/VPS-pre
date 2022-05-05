@@ -123,10 +123,6 @@ enkey() {
     sed -i '/PasswordAuthentication/a\PasswordAuthentication no' /etc/ssh/sshd_config
 }
 
-adddocker(){
-    yum -y install podman
-}    
-
 install() {
     installbbr
     cfgfirewall
