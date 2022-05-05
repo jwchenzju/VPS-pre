@@ -107,8 +107,13 @@ net.ipv4.tcp_keepalive_time = 1200
 
 installssr(){
     yum install -y podman podman-docker
-    docker pull docker.io/teddysun/shadowsocks-r:latest
-    docker run -d --net host --name ssr --restart=always -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
+    podman pull docker.io/teddysun/shadowsocks-r:latest
+    podman run -d --net host --name ssr --restart=always -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
+    podman generate systemd --restart-policy always -t 1 -n -f ssr
+    mv container-ssr.service /etc/systemd/system/
+    systemctl daemon-reload
+    restorecon -RvF container-ssr.service
+    systemctl enable container-ssr.service --now
 }
 
 enkey() {
