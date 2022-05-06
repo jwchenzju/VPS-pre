@@ -116,8 +116,11 @@ installssr(){
     yum install -y podman podman-docker
     podman pull docker.io/teddysun/shadowsocks-r:latest
     podman run -d --net host --name ssr --restart=always -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
+}
+
+autossr(){
     podman generate systemd --restart-policy always -t 1 -n -f ssr
-    mv container-ssr.service /etc/systemd/system/
+    cp container-ssr.service /etc/systemd/system/
     chmod +x /etc/rc.d/rc.local
     restorecon -RvF /etc/systemd/system/container-ssr.service
     systemctl daemon-reload
@@ -135,6 +138,7 @@ install() {
     cfgddos
     enkey
     installssr
+    autossr
 }
 
 menu() {
