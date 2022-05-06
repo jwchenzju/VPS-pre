@@ -105,6 +105,13 @@ net.ipv4.tcp_keepalive_time = 1200
     echo "DDOS cfg finished"
 }
 
+enkey() {
+    mkdir /root/.ssh
+    echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK3nySoKInWCHtdS5SVCKdJXVoclWGumaYx9sm5YQBpG ed25519-key-20220506" >>/root/.ssh/authorized_keys
+    sed -i '/^PasswordAuthentication/s/^/#/g' /etc/ssh/sshd_config
+    sed -i '/PasswordAuthentication/a\PasswordAuthentication no' /etc/ssh/sshd_config
+}
+
 installssr(){
     yum install -y podman podman-docker
     podman pull docker.io/teddysun/shadowsocks-r:latest
@@ -117,13 +124,6 @@ installssr(){
     systemctl enable container-ssr.service --now
 }
 
-enkey() {
-    mkdir /root/.ssh
-    echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK3nySoKInWCHtdS5SVCKdJXVoclWGumaYx9sm5YQBpG ed25519-key-20220506" >>/root/.ssh/authorized_keys
-    sed -i '/^PasswordAuthentication/s/^/#/g' /etc/ssh/sshd_config
-    sed -i '/PasswordAuthentication/a\PasswordAuthentication no' /etc/ssh/sshd_config
-}
-
 install() {
     installbbr
     cfgfirewall
@@ -133,8 +133,8 @@ install() {
     enlargesoft
     cfglogrote
     cfgddos
-    installssr
     enkey
+    installssr
 }
 
 menu() {
