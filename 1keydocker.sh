@@ -8,6 +8,7 @@ YELLOW="\033[33m"   # Warning message
 BLUE="\033[36m"     # Info message
 PLAIN='\033[0m'
 
+#安装BBR，因为新版本都是新内核，直接改配置文件即可
 installbbr(){
     echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
     echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
@@ -15,6 +16,7 @@ installbbr(){
     echo "bbr configuration finished"
 }
 
+#配置防火墙，开启20058/20059，并转发39100-40000端口到SSRR，实现多端口
 cfgfirewall() {
     systemctl start firewalld
     firewall-cmd --permanent --add-port=22/tcp
@@ -33,6 +35,7 @@ cfgfirewall() {
     echo "firewalld configuration finished"
 }
 
+#FAIL2BAN用于保护SSHD
 installfail2ban() {
     yum -y install epel-release
     yum -y install fail2ban
@@ -51,6 +54,7 @@ EOF
     echo "jail.local cfg finished"
 }
 
+#SSRR配置，并转发错误至443的HTTPS网站，应配置网站并配备证书叉混淆防火墙的探测
 mkjson() {
     mkdir /etc/shadowsocks-r
     cat > /etc/shadowsocks-r/config.json <<'EOF'
@@ -79,6 +83,7 @@ EOF
 
 }
 
+#这个其实在新的SYSTEMD已经没有意义了
 enlargesoft() {
     echo "* soft nofile 65535" >>/etc/security/limits.conf
     echo "* hard nofile 65535" >>/etc/security/limits.conf
@@ -90,6 +95,23 @@ cfglogrote() {
     echo "logrotate installed"
 }
 
+#对PODMAN的日志进行滚动，不然时间长了会填满硬盘
+rotepodman(){
+touch /etc/logrotate.d/podman
+cat > /etc/logrotate.d/podman <<'EOF'
+/var/lib/containers/storage/overlay-containers/*/*/*.log {
+weekly
+size 10M
+rotate 5
+dateext
+copytruncate
+missingok
+nocompress
+}
+EOF
+}
+
+#减缓DDOS攻击，网上查来的，不一定有用
 cfgddos() {
     echo "
 # TCP SYN Flood Protection
@@ -107,6 +129,7 @@ net.ipv4.tcp_keepalive_time = 1200
     echo "DDOS cfg finished"
 }
 
+#此项不要用！这是我个人的证书！
 enkey() {
     mkdir /root/.ssh
     echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK3nySoKInWCHtdS5SVCKdJXVoclWGumaYx9sm5YQBpG ed25519-key-20220506" >>/root/.ssh/authorized_keys
@@ -120,6 +143,7 @@ installssr(){
     podman run -d --net host --name ssr --restart=always -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
 }
 
+#启用SSR的开机自动运行
 autossr(){
     podman generate systemd --restart-policy always -t 1 -n -f ssr
     cp container-ssr.service /etc/systemd/system/
