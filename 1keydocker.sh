@@ -161,6 +161,7 @@ install() {
     mkjson
     enlargesoft
     cfglogrote
+    rotepodman
     cfgddos
     enkey
     installssr
