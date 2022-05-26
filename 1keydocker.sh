@@ -10,9 +10,9 @@ PLAIN='\033[0m'
 
 #安装BBR，因为新版本都是新内核，直接改配置文件即可
 installbbr(){
-    echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
-    echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
-    sysctl -p
+    touch /etc/sysctl.d/bbr.conf
+    echo "net.core.default_qdisc=fq" >> /etc/sysctl.d/bbr.conf
+    echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.d/bbr.conf
     echo "bbr configuration finished"
 }
 
@@ -85,8 +85,9 @@ EOF
 
 #这个其实在新的SYSTEMD已经没有意义了
 enlargesoft() {
-    echo "* soft nofile 65535" >>/etc/security/limits.conf
-    echo "* hard nofile 65535" >>/etc/security/limits.conf
+    touch /etc/security/limits.d/large.conf
+    echo "* soft nofile 65535" >>/etc/security/limits.d/large.conf
+    echo "* hard nofile 65535" >>/etc/security/limits.d/large.conf
     echo "soft/hard nofile enlarged to 65535"
 }
 
@@ -113,6 +114,7 @@ EOF
 
 #减缓DDOS攻击，网上查来的，不一定有用
 cfgddos() {
+    touch /etc/sysctl.d/ddos.conf
     echo "
 # TCP SYN Flood Protection
 net.ipv4.tcp_syncookies = 1
@@ -125,7 +127,7 @@ net.ipv4.tcp_max_syn_backlog = 262144
 net.core.netdev_max_backlog = 262144
 net.ipv4.tcp_max_orphans = 262144
 net.ipv4.tcp_keepalive_time = 1200
-" >> /etc/sysctl.conf
+" >> /etc/sysctl.d/ddos.conf
     echo "DDOS cfg finished"
 }
 
