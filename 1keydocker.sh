@@ -98,6 +98,11 @@ cfglogrote() {
 
 #对PODMAN的日志进行滚动，不然时间长了会填满硬盘
 rotepodman(){
+#限制PODMAN日志不大于100M
+touch /etc/containers/containers.conf
+echo "[containers]" >>/etc/containers/containers.conf
+echo "log_size_max=100000000" >>/etc/containers/containers.conf
+#尝试滚动日志，每个10M，共5个日志
 touch /etc/logrotate.d/podman
 cat > /etc/logrotate.d/podman <<'EOF'
 /var/lib/containers/storage/overlay-containers/*/*/*.log {
