@@ -157,7 +157,7 @@ autossr(){
     chmod +x /etc/rc.d/rc.local
     restorecon -RvF /etc/systemd/system/container-ssr.service
     systemctl daemon-reload
-    systemctl enable container-ssr.service --now
+    systemctl enable container-ssr.service
 }
 
 install() {
