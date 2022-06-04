@@ -147,7 +147,7 @@ enkey() {
 installssr(){
     yum install -y podman podman-docker
     podman pull docker.io/teddysun/shadowsocks-r:latest
-    podman run -d --net host --name ssr -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
+    podman create --net host --name ssr -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
 }
 
 #启用SSR的开机自动运行
