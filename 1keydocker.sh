@@ -153,9 +153,8 @@ installssr(){
 #启用SSR的开机自动运行
 autossr(){
     podman generate systemd --restart-policy always -t 1 -n -f ssr
-    cp container-ssr.service /etc/systemd/system/
-    chmod +x /etc/rc.d/rc.local
-    restorecon -RvF /etc/systemd/system/container-ssr.service
+    mv container-ssr.service /etc/systemd/system/
+    restorecon -R /etc/systemd/system/container-ssr.service
     systemctl daemon-reload
     systemctl enable container-ssr.service
 }
@@ -173,6 +172,7 @@ install() {
     enkey
     installssr
     autossr
+    echo "script finished"
 }
 
 menu() {
