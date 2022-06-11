@@ -146,7 +146,7 @@ installssr(){
 --log-opt path=/var/log/shadowsocksr.log \
 --log-opt max-size=10m \
 --log-opt  max-file=5 \
---name ssr \
+--name ssr1 \
 -v /etc/shadowsocks-r:/etc/shadowsocks-r \
 teddysun/shadowsocks-r
 }
