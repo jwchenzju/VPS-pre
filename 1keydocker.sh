@@ -102,6 +102,14 @@ rotepodman(){
 touch /etc/containers/containers.conf
 echo "[containers]" >>/etc/containers/containers.conf
 echo "log_size_max=50000000" >>/etc/containers/containers.conf
+#限制journal尺寸
+mkdir /etc/systemd/journald.conf.d
+touch /etc/systemd/journald.conf.d/limitsize.conf
+echo "[Journal]" >>/etc/systemd/journald.conf.d/limitsize.conf
+echo "SystemMaxFileSize=5M" >>/etc/systemd/journald.conf.d/limitsize.conf
+echo "SystemMaxFiles=10" >>/etc/systemd/journald.conf.d/limitsize.conf
+echo "RuntimeMaxFileSize=5M" >>/etc/systemd/journald.conf.d/limitsize.conf
+echo "RuntimeMaxFiles=100" >>/etc/systemd/journald.conf.d/limitsize.conf
 #尝试滚动日志，每个10M，共5个日志
 touch /etc/logrotate.d/podman
 cat > /etc/logrotate.d/podman <<'EOF'
@@ -147,7 +155,7 @@ enkey() {
 installssr(){
     yum install -y podman podman-docker
     podman pull docker.io/teddysun/shadowsocks-r:latest
-    podman create --net host --name ssr -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
+    podman create --net host --log-driver k8s-file --name ssr -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
 }
 
 #启用SSR的开机自动运行
