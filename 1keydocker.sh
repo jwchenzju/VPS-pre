@@ -110,19 +110,6 @@ echo "SystemMaxFileSize=5M" >>/etc/systemd/journald.conf.d/limitsize.conf
 echo "SystemMaxFiles=10" >>/etc/systemd/journald.conf.d/limitsize.conf
 echo "RuntimeMaxFileSize=5M" >>/etc/systemd/journald.conf.d/limitsize.conf
 echo "RuntimeMaxFiles=10" >>/etc/systemd/journald.conf.d/limitsize.conf
-#尝试滚动日志，每个10M，共5个日志
-touch /etc/logrotate.d/podman
-cat > /etc/logrotate.d/podman <<'EOF'
-/var/lib/containers/storage/overlay-containers/*/*/*.log {
-weekly
-size 10M
-rotate 5
-dateext
-copytruncate
-missingok
-nocompress
-}
-EOF
 }
 
 #减缓DDOS攻击，网上查来的，不一定有用
@@ -155,7 +142,7 @@ enkey() {
 installssr(){
     yum install -y podman podman-docker
     podman pull docker.io/teddysun/shadowsocks-r:latest
-    podman create --net host --log-driver k8s-file --name ssr -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
+    podman create --net host --log-driver k8s-file --log-opt path=/var/log/shadowsocksr.log --log-opt max-size=10m --log-opt  max-file=5 --name ssr -v /etc/shadowsocks-r:/etc/shadowsocks-r teddysun/shadowsocks-r
 }
 
 #启用SSR的开机自动运行
