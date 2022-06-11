@@ -106,10 +106,8 @@ echo "log_size_max=50000000" >>/etc/containers/containers.conf
 mkdir /etc/systemd/journald.conf.d
 touch /etc/systemd/journald.conf.d/limitsize.conf
 echo "[Journal]" >>/etc/systemd/journald.conf.d/limitsize.conf
-echo "SystemMaxFileSize=5M" >>/etc/systemd/journald.conf.d/limitsize.conf
-echo "SystemMaxFiles=10" >>/etc/systemd/journald.conf.d/limitsize.conf
-echo "RuntimeMaxFileSize=5M" >>/etc/systemd/journald.conf.d/limitsize.conf
-echo "RuntimeMaxFiles=10" >>/etc/systemd/journald.conf.d/limitsize.conf
+echo "SystemMaxUse==50M" >>/etc/systemd/journald.conf.d/limitsize.conf
+echo "RuntimeMaxUse==50M" >>/etc/systemd/journald.conf.d/limitsize.conf
 }
 
 #减缓DDOS攻击，网上查来的，不一定有用
