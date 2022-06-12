@@ -140,11 +140,7 @@ enkey() {
 installssr(){
     yum install -y podman podman-docker
     podman pull docker.io/teddysun/shadowsocks-r:latest
-    podman create --net host --log-driver k8s-file \
---log-opt path=/var/log/shadowsocksr.log \
---log-opt max-size=10m \
---log-opt  max-file=5 \
---name ssr \
+    podman create --net host --name ssr \
 -v /etc/shadowsocks-r:/etc/shadowsocks-r \
 teddysun/shadowsocks-r
 }
