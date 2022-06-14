@@ -96,20 +96,6 @@ cfglogrote() {
     echo "logrotate installed"
 }
 
-#对PODMAN的日志进行滚动，不然时间长了会填满硬盘
-rotepodman(){
-#限制PODMAN日志不大于50M
-touch /etc/containers/containers.conf
-echo "[containers]" >>/etc/containers/containers.conf
-echo "log_size_max=50000000" >>/etc/containers/containers.conf
-#限制journal尺寸
-mkdir /etc/systemd/journald.conf.d
-touch /etc/systemd/journald.conf.d/limitsize.conf
-echo "[Journal]" >>/etc/systemd/journald.conf.d/limitsize.conf
-echo "SystemMaxUse=50M" >>/etc/systemd/journald.conf.d/limitsize.conf
-echo "RuntimeMaxUse=50M" >>/etc/systemd/journald.conf.d/limitsize.conf
-}
-
 #减缓DDOS攻击，网上查来的，不一定有用
 cfgddos() {
     touch /etc/sysctl.d/ddos.conf
@@ -142,8 +128,7 @@ installssr(){
     podman pull docker.io/teddysun/shadowsocks-r:latest
     podman create --net host --log-driver k8s-file \
 --log-opt path=/var/log/shadowsocksr.log \
---log-opt max-size=10m \
---log-opt  max-file=5 \
+--log-opt max-size=50m \
 --name ssr \
 -v /etc/shadowsocks-r:/etc/shadowsocks-r \
 teddysun/shadowsocks-r
@@ -166,7 +151,6 @@ install() {
     mkjson
     enlargesoft
     cfglogrote
-    rotepodman
     cfgddos
     enkey
     installssr
