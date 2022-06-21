@@ -100,17 +100,14 @@ cfglogrote() {
 cfgddos() {
     touch /etc/sysctl.d/ddos.conf
     echo "
+
 # TCP SYN Flood Protection
 net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_fin_timeout = 30
 net.ipv4.tcp_tw_reuse = 1
 net.ipv4.tcp_max_tw_buckets = 6000
-net.ipv4.tcp_syn_retries = 1
-net.ipv4.tcp_synack_retries = 1
 net.ipv4.tcp_max_syn_backlog = 262144
 net.core.netdev_max_backlog = 262144
 net.ipv4.tcp_max_orphans = 262144
-net.ipv4.tcp_keepalive_time = 1200
 " >> /etc/sysctl.d/ddos.conf
     echo "DDOS cfg finished"
 }
