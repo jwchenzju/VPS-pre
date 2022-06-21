@@ -100,7 +100,6 @@ cfglogrote() {
 cfgddos() {
     touch /etc/sysctl.d/ddos.conf
     echo "
-
 # TCP SYN Flood Protection
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_tw_reuse = 1
