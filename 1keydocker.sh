@@ -1,5 +1,5 @@
 #!/bin/bash
-# VPS预安装环境，用DOCKER安装和配置好SSR
+# VPS预安装环境，用DOCKER安装和配置好SS+v2rayplugin
 # Author: Delphi Chen
 
 RED="\033[31m"      # Error message
@@ -16,20 +16,20 @@ installbbr(){
     echo "bbr configuration finished"
 }
 
-#配置防火墙，开启20058/20059，并转发39100-40000端口到SSRR，实现多端口
+#配置防火墙，开启80,443，并转发39100-40000端口到SS，实现多端口
 cfgfirewall() {
     systemctl start firewalld
     firewall-cmd --permanent --add-port=22/tcp
-    firewall-cmd --permanent --add-port=20058-20059/tcp
-    firewall-cmd --permanent --add-port=20058-20059/udp
+    firewall-cmd --permanent --add-port=80/tcp
+    firewall-cmd --permanent --add-port=80/udp
     firewall-cmd --permanent --add-port=443/tcp
     firewall-cmd --permanent --add-port=443/udp
     firewall-cmd --permanent --add-port=39000-40000/tcp
     firewall-cmd --permanent --add-port=39000-40000/udp
-    firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=tcp:toport=20059
-    firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=udp:toport=20059
-    firewall-cmd --permanent --add-rich-rule='rule family='ipv6' forward-port port='39100-40000' to-port='20059' protocol='tcp''
-    firewall-cmd --permanent --add-rich-rule='rule family='ipv6' forward-port port='39100-40000' to-port='20059' protocol='udp''
+    firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=tcp:toport=80
+    firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=udp:toport=80
+    firewall-cmd --permanent --add-rich-rule='rule family='ipv6' forward-port port='39100-40000' to-port='80' protocol='tcp''
+    firewall-cmd --permanent --add-rich-rule='rule family='ipv6' forward-port port='39100-40000' to-port='80' protocol='udp''
     firewall-cmd --reload
     systemctl enable firewalld
     echo "firewalld configuration finished"
@@ -44,57 +44,30 @@ installfail2ban() {
     echo "fail2ban installation finished"
 }
 
-banssr(){
-cat > /etc/fail2ban/filter.d/shadowsocks.conf << 'EOF'
-[INCLUDES]
-before = common.conf
-[Definition]
-_daemon = shadowsocks
-failregex = ^\s+ERROR\s\s\s\s+tcprelay.py:1097 can not parse header when handling connection from <HOST>:\d+$
-ignoreregex =
-EOF
-}
-
-
 cfgjaillocal() {
     cat > /etc/fail2ban/jail.local <<'EOF'
 [sshd]
 enabled=true
-
-[shadowsocks]
-enabled = true
-filter = shadowsocks
-port = 20058-40000
-logpath = /var/log/shadowsocksr.log
-maxretry = 1
 EOF
 
     echo "jail.local cfg finished"
 }
 
-#SSRR配置，并转发错误至443的HTTPS网站，应配置网站并配备证书叉混淆防火墙的探测
+#SS+V2rayplugin配置，带IPV6
 mkjson() {
-    mkdir /etc/shadowsocks-r
-    cat > /etc/shadowsocks-r/config.json <<'EOF'
+    mkdir /etc/shadowsocks-libev
+    cat > /etc/shadowsocks-libev/config.json <<'EOF'
 {
-    "server":"0.0.0.0",
-    "server_ipv6":"::",
-    "local_address":"127.0.0.1",
-    "local_port":1080,
-    "port_password":{
-    "20058":"o0vnvH$t^IvUh%L!",
-    "20059":"o0vnvH$t^IvUh%L!"
-    },
-    "timeout":120,
-    "method":"none",
-    "protocol":"auth_chain_d",
-    "protocol_param":"65500",
-    "obfs":"plain",
-    "obfs_param":"",
-    "redirect":"",
-    "dns_ipv6":false,
+    "server":["[::0]", "0.0.0.0"],
+    "server_port":80,
+    "password":"o0vnvH$t^IvUh%L!",
+    "timeout":300,
+    "method":"aes-256-gcm",
     "fast_open":false,
-    "workers":1
+    "nameserver":"8.8.8.8",
+    "mode":"tcp_and_udp",
+    "plugin":"v2ray-plugin",
+    "plugin_opts":"server"
 }
 EOF
     echo "SSR jason in /etc/shadowsocks-r/config.json finished"
@@ -107,11 +80,6 @@ enlargesoft() {
     echo "* soft nofile 65535" >>/etc/security/limits.d/large.conf
     echo "* hard nofile 65535" >>/etc/security/limits.d/large.conf
     echo "soft/hard nofile enlarged to 65535"
-}
-
-cfglogrote() {
-    yum -y install logrotate
-    echo "logrotate installed"
 }
 
 #减缓DDOS攻击，网上查来的，不一定有用
@@ -137,40 +105,38 @@ enkey() {
     sed -i '/PasswordAuthentication/a\PasswordAuthentication no' /etc/ssh/sshd_config
 }
 
-installssr(){
+installss(){
     yum install -y podman podman-docker
-    touch /var/log/shadowsocksr.log
-    podman pull docker.io/teddysun/shadowsocks-r:latest
+    touch /var/log/shadowsocks-libev.log
+    podman pull docker.io/teddysun/shadowsocks-libev:latest
     podman create --net host --log-driver k8s-file \
---log-opt path=/var/log/shadowsocksr.log \
+--log-opt path=/var/log/shadowsocks-libev.log \
 --log-opt max-size=50m \
---name ssr \
--v /etc/shadowsocks-r:/etc/shadowsocks-r \
-teddysun/shadowsocks-r
+--name ss \
+-v /etc/shadowsocks-libev:/etc/shadowsocks-libev \
+teddysun/shadowsocks-libev
 }
 
 #启用SSR的开机自动运行
-autossr(){
-    podman generate systemd --restart-policy always -t 1 -n -f ssr
-    mv container-ssr.service /etc/systemd/system/
-    restorecon -R /etc/systemd/system/container-ssr.service
+autoss(){
+    podman generate systemd --restart-policy always -t 1 -n -f ss
+    mv container-ss.service /etc/systemd/system/
+    restorecon -R /etc/systemd/system/container-ss.service
     systemctl daemon-reload
-    systemctl enable container-ssr.service
+    systemctl enable container-ss.service
 }
 
 install() {
     installbbr
     cfgfirewall
     installfail2ban
-    banssr
     cfgjaillocal
     mkjson
     enlargesoft
-    cfglogrote
     cfgddos
     enkey
-    installssr
-    autossr
+    installss
+    autoss
     echo "script finished"
 }
 
