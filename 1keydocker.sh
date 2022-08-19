@@ -73,7 +73,7 @@ mkjson() {
     "protocol_param":"65500",
     "obfs":"plain",
     "obfs_param":"",
-    "redirect":"127.0.0.1:443",
+    "redirect":"",
     "dns_ipv6":false,
     "fast_open":false,
     "workers":1
