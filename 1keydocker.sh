@@ -44,11 +44,29 @@ installfail2ban() {
     echo "fail2ban installation finished"
 }
 
+banssr(){
+cat > /etc/fail2ban/filter.d/shadowsocks.conf << 'EOF'
+[INCLUDES]
+before = common.conf
+[Definition]
+_daemon = shadowsocks
+failregex = ^\s+ERROR\s\s\s\s+tcprelay.py:1097 can not parse header when handling connection from <HOST>:\d+$
+ignoreregex =
+EOF
+}
+
+
 cfgjaillocal() {
     cat > /etc/fail2ban/jail.local <<'EOF'
 [sshd]
 enabled=true
-bantime  = 3600
+
+[shadowsocks]
+enabled = true
+filter = shadowsocks
+port = 20058-40000
+logpath = /var/log/shadowsocksr.log
+maxretry = 1
 EOF
 
     echo "jail.local cfg finished"
@@ -121,6 +139,7 @@ enkey() {
 
 installssr(){
     yum install -y podman podman-docker
+    touch /var/log/shadowsocksr.log
     podman pull docker.io/teddysun/shadowsocks-r:latest
     podman create --net host --log-driver k8s-file \
 --log-opt path=/var/log/shadowsocksr.log \
@@ -143,6 +162,7 @@ install() {
     installbbr
     cfgfirewall
     installfail2ban
+    banssr
     cfgjaillocal
     mkjson
     enlargesoft
