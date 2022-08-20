@@ -5,7 +5,6 @@ podman create -p 443:80 --log-driver k8s-file \
 --log-opt path=/var/log/nextcloud.log \
 --log-opt max-size=50m \
 --name nextcloud \
--v /var/www/html:/var/www/html \
 nextcloud
 
 #添加为自动运行
