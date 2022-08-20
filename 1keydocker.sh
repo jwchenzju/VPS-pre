@@ -60,7 +60,7 @@ mkjson() {
 {
     "server":["[::0]", "0.0.0.0"],
     "server_port":80,
-    "password":"o0vnvH$t^IvUh%L!",
+    "password":"BJ8E8o!A5rT&V!meig7ZeA^Ji^hL7%nR",
     "timeout":300,
     "method":"aes-256-gcm",
     "fast_open":false,
