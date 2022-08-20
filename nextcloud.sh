@@ -1,6 +1,7 @@
 #1KEYDOCKER安装后，可安装网盘
+firewall-cmd --permanent --add-port=8888/tcp
 podman pull docker.io/nextcloud
-podman create -p 443:80 --log-driver k8s-file \
+podman create -p 8888:80 --log-driver k8s-file \
 --log-opt path=/var/log/nextcloud.log \
 --log-opt max-size=50m \
 --name nextcloud \
