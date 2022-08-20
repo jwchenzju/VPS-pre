@@ -1,5 +1,5 @@
 #1KEYDOCKER安装后，可安装网盘
-mkdir /var/www/html
+mkdir -p /var/www/html
 podman pull nextcloud
 podman create -p 443:80 --log-driver k8s-file \
 --log-opt path=/var/log/nextcloud.log \
