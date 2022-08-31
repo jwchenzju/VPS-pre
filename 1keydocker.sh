@@ -70,7 +70,7 @@ mkjson() {
     "plugin_opts":"server"
 }
 EOF
-    echo "SSR jason in /etc/shadowsocks-r/config.json finished"
+    echo "SS jason in /etc/shadowsocks-libev/config.json finished"
 
 }
 
@@ -107,7 +107,6 @@ enkey() {
 
 installss(){
     yum install -y podman podman-docker
-    touch /var/log/shadowsocks-libev.log
     podman pull docker.io/teddysun/shadowsocks-libev:latest
     podman create --net host --log-driver k8s-file \
 --log-opt path=/var/log/shadowsocks-libev.log \
