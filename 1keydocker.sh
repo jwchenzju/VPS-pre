@@ -107,7 +107,7 @@ installss(){
                   docker-logrotate \
                   docker-engine \
                   podman \
-                  podman-docker \
+                  podman-docker
     yum install -y yum-utils
     yum-config-manager \
         --add-repo \
