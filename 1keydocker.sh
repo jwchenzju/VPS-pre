@@ -98,6 +98,7 @@ enkey() {
 }
 
 installss(){
+    yum -y erase podman buildah
     yum -y remove docker \
                   docker-client \
                   docker-client-latest \
@@ -105,9 +106,7 @@ installss(){
                   docker-latest \
                   docker-latest-logrotate \
                   docker-logrotate \
-                  docker-engine \
-                  podman \
-                  podman-docker
+                  docker-engine
     yum install -y yum-utils
     yum-config-manager \
         --add-repo \
