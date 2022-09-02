@@ -22,8 +22,7 @@ cfgfirewall() {
     firewall-cmd --permanent --add-port=22/tcp
     firewall-cmd --permanent --add-port=80/tcp
     firewall-cmd --permanent --add-port=80/udp
-    firewall-cmd --permanent --add-port=443/tcp
-    firewall-cmd --permanent --add-port=443/udp
+    firewall-cmd --permanent --add-port=8888/tcp
     firewall-cmd --permanent --add-port=39000-40000/tcp
     firewall-cmd --permanent --add-port=39000-40000/udp
     firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=tcp:toport=80
@@ -74,13 +73,6 @@ EOF
 
 }
 
-#这个其实在新的SYSTEMD已经没有意义了
-enlargesoft() {
-    touch /etc/security/limits.d/large.conf
-    echo "* soft nofile 65535" >>/etc/security/limits.d/large.conf
-    echo "* hard nofile 65535" >>/etc/security/limits.d/large.conf
-    echo "soft/hard nofile enlarged to 65535"
-}
 
 #减缓DDOS攻击，网上查来的，不一定有用
 cfgddos() {
@@ -106,24 +98,32 @@ enkey() {
 }
 
 installss(){
-    yum install -y podman podman-docker
-    podman pull docker.io/teddysun/shadowsocks-libev:latest
-    podman create --net host --log-driver k8s-file \
---log-opt path=/var/log/shadowsocks-libev.log \
---log-opt max-size=50m \
---name ss \
--v /etc/shadowsocks-libev:/etc/shadowsocks-libev \
-teddysun/shadowsocks-libev
+    yum -y remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine \
+                  podman \
+                  podman-docker \
+    yum install -y yum-utils
+    yum-config-manager \
+        --add-repo \
+        https://download.docker.com/linux/centos/docker-ce.repo
+    yum -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    systemctl start docker
+    systemctl enable docker
+    docker run -d --net host --restart=always \
+           --log-driver local \
+           --log-opt max-size=10m \
+           --log-opt max-file=5 \
+           --name ss \
+           -v /etc/shadowsocks-libev:/etc/shadowsocks-libev \
+           teddysun/shadowsocks-libev
 }
 
-#启用SSR的开机自动运行
-autoss(){
-    podman generate systemd --restart-policy always -t 1 -n -f ss
-    mv container-ss.service /etc/systemd/system/
-    restorecon -R /etc/systemd/system/container-ss.service
-    systemctl daemon-reload
-    systemctl enable container-ss.service
-}
 
 install() {
     installbbr
@@ -131,11 +131,9 @@ install() {
     installfail2ban
     cfgjaillocal
     mkjson
-    enlargesoft
     cfgddos
     enkey
     installss
-    autoss
     echo "script finished"
 }
 
