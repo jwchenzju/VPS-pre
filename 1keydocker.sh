@@ -116,8 +116,6 @@ installss(){
     systemctl enable docker
     docker run -d --net host --restart=always \
            --log-driver local \
-           --log-opt max-size=10m \
-           --log-opt max-file=5 \
            --name ss \
            -v /etc/shadowsocks-libev:/etc/shadowsocks-libev \
            teddysun/shadowsocks-libev
