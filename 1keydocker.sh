@@ -62,8 +62,10 @@ mkjson() {
     "password":"BJ8E8o!A5rT&V!meig7ZeA^Ji^hL7%nR",
     "method":"aes-256-gcm",
     "mode":"tcp_and_udp",
+    "ipv6_first":true,
     "plugin":"v2ray-plugin",
     "plugin_opts":"server"
+
 }
 EOF
     echo "SS jason in /etc/shadowsocks-libev/config.json finished"
