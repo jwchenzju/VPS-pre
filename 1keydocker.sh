@@ -57,7 +57,7 @@ mkjson() {
     mkdir /etc/shadowsocks-libev
     cat > /etc/shadowsocks-libev/config.json <<'EOF'
 {
-    "server":["[::0]", "0.0.0.0"],
+    "server":"0.0.0.0",
     "server_port":80,
     "password":"BJ8E8o!A5rT&V!meig7ZeA^Ji^hL7%nR",
     "timeout":300,
