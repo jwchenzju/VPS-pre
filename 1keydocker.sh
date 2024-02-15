@@ -57,17 +57,17 @@ mkjson() {
     mkdir /etc/shadowsocks-libev
     cat > /etc/shadowsocks-libev/config.json <<'EOF'
 {
-    "server":"0.0.0.0",
+    "server":["::0","0.0.0.0"],
     "server_port":80,
     "password":"BJ8E8o!A5rT&V!meig7ZeA^Ji^hL7%nR",
-    "timeout":300,
     "method":"aes-256-gcm",
     "fast_open":false,
-    "nameserver":"8.8.8.8",
     "mode":"tcp_and_udp",
+    "ipv6_first":true,
     "plugin":"v2ray-plugin",
     "plugin_opts":"server"
 }
+
 EOF
     echo "SS jason in /etc/shadowsocks-libev/config.json finished"
 
