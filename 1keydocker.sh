@@ -16,7 +16,7 @@ installbbr(){
     echo "bbr configuration finished"
 }
 
-#配置防火墙，开启80,443，并转发39100-40000端口到SS，实现多端口,同时开启高位端口UDP以实现FULLCONE
+#配置防火墙，开启80,443，并转发39100-40000端口到SS，实现多端口,同时开启高位端口UDP以实现FULLCONE;同时增大连接数以防止多用户时连接不足
 cfgfirewall() {
     systemctl start firewalld
     firewall-cmd --permanent --add-port=22/tcp
@@ -31,6 +31,16 @@ cfgfirewall() {
     firewall-cmd --permanent --add-rich-rule='rule family='ipv6' forward-port port='39100-40000' to-port='80' protocol='udp''
     firewall-cmd --reload
     systemctl enable firewalld
+     cat > /etc/security/limits.d/max.conf <<'EOF'
+* soft nofile 131072
+* hard nofile 131072
+* soft nproc 131072
+* hard nproc 131072
+* soft core unlimited
+* hard core unlimited
+* soft memlock 50000000
+* hard memlock 50000000
+EOF
     echo "firewalld configuration finished"
 }
 
