@@ -23,7 +23,7 @@
 }
 EOF
 #docker-ssr
- docker run -d --net host --restart=always \
+ docker run -d --net host --restart always \
            --log-driver local \
            --name ssr \
            -v /etc/shadowsocks-r:/etc/shadowsocks-r \
