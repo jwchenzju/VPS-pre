@@ -63,7 +63,6 @@ mkjson() {
     "method":"aes-256-gcm",
     "fast_open":false,
     "mode":"tcp_and_udp",
-    "ipv6_first":true,
     "plugin":"v2ray-plugin",
     "plugin_opts":"server"
 }
@@ -114,7 +113,7 @@ installss(){
     yum -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin
     systemctl start docker
     systemctl enable docker
-    docker run -d --net host --restart=always \
+    docker run -d --net host --restart always \
            --log-driver local \
            --name ss \
            -v /etc/shadowsocks-libev:/etc/shadowsocks-libev \
