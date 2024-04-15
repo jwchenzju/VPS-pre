@@ -69,7 +69,7 @@ mkjson() {
     mkdir /etc/shadowsocks-libev
     cat > /etc/shadowsocks-libev/config.json <<'EOF'
 {
-    "server":["::0","0.0.0.0"],
+    "server":"::",
     "server_port":80,
     "password":"BJ8E8o!A5rT&V!meig7ZeA^Ji^hL7%nR",
     "method":"aes-256-gcm",
