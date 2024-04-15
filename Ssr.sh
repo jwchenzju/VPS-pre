@@ -1,3 +1,4 @@
+#请注意这个配置RC4-CMD5加密已被识别，故只能应用于纯IPV6端口即39000-39099，切记！
 #mkjason() 
     mkdir /etc/shadowsocks-r
     cat > /etc/shadowsocks-r/config.json <<'EOF'
@@ -11,8 +12,8 @@
     "39039":"o0vnvH$t^IvUh%L!"
     },
     "timeout":120,
-    "method":"none",
-    "protocol":"auth_chain_d",
+    "method":"rc4-md5",
+    "protocol":"origin",
     "protocol_param":"65500",
     "obfs":"plain",
     "obfs_param":"",
@@ -21,6 +22,7 @@
     "fast_open":false,
     "workers":1
 }
+
 EOF
 #docker-ssr
  docker run -d --net host --restart always \
