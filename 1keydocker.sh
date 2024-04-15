@@ -25,6 +25,7 @@ cfgfirewall() {
     firewall-cmd --permanent --add-port=8888/tcp
     firewall-cmd --permanent --add-port=39100-40000/tcp
     firewall-cmd --permanent --add-port=1024-65535/udp
+    #39000-39099只开通IPV6端口，用于IPV6梯子
     firewall-cmd --permanent --add-rich-rule='rule family='ipv6' port protocol='tcp' port='39000-39099' accept'
     firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=tcp:toport=80
     firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=udp:toport=80
