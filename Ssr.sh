@@ -3,7 +3,7 @@
     mkdir /etc/shadowsocks-r
     cat > /etc/shadowsocks-r/config.json <<'EOF'
 {
-    "server":"",
+    "server":"127.0.0.1",
     "server_ipv6":"::",
     "local_address":"127.0.0.1",
     "local_port":1080,
