@@ -18,7 +18,7 @@
     "obfs":"plain",
     "obfs_param":"",
     "redirect":"",
-    "dns_ipv6":false,
+    "dns_ipv6":true,
     "fast_open":false,
     "workers":1
 }
