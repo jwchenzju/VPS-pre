@@ -77,7 +77,7 @@ mkjson() {
     "mode":"tcp_and_udp",
     "plugin":"v2ray-plugin",
     "plugin_opts":"server",
-    "ipv6_first": false
+    "ipv6_first": true
 }
 EOF
     echo "SS jason in /etc/shadowsocks-libev/config.json finished"
