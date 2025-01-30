@@ -1,0 +1,4 @@
+#acme获取证书，并拷贝到NPS的配置文件夹下
+/root/.acme.sh/acme.sh --issue --dns dns_vultr -d example.de -d *.example.de
+/bin/cp -rf /root/.acme.sh/delphichen.de_ecc/delphichen.de.cer /etc/nps/conf/server.pem
+/bin/cp -rf /root/.acme.sh/delphichen.de_ecc/delphichen.de.key /etc/nps/conf/server.key
