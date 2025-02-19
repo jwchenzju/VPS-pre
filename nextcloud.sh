@@ -3,5 +3,7 @@
 docker run --restart always -d -p 8888:80 \
     -v /nextcloud:/var/www/html \
     --log-driver local \
+    --env PHP_MEMORY_LIMIT=1024M \
+    --env PHP_UPLOAD_LIMIT=1024M \
     --name nextcloud \
-    nextcloud:29.0.11
+    nextcloud:30.0.5
