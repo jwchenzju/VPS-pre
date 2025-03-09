@@ -16,21 +16,22 @@ installbbr(){
     echo "bbr configuration finished"
 }
 
-#配置防火墙，开启80,443，并转发39100-40000端口到SS，实现多端口,同时开启高位端口UDP以实现FULLCONE;同时增大连接数以防止多用户时连接不足
+#配置防火墙，开启80，并转发39100-40000端口到SS，实现多端口,同时开启高位端口UDP以实现FULLCONE;同时增大连接数以防止多用户时连接不足
 cfgfirewall() {
     systemctl start firewalld
     firewall-cmd --permanent --add-port=22/tcp
     firewall-cmd --permanent --add-port=80/tcp
     firewall-cmd --permanent --add-port=80/udp
-    firewall-cmd --permanent --add-port=8888/tcp
+    firewall-cmd --permanent --add-port=39000-39030/tcp
+    firewall-cmd --permanent --add-port=39080-39090/tcp
     firewall-cmd --permanent --add-port=39100-40000/tcp
     firewall-cmd --permanent --add-port=1024-65535/udp
     #39000-39099只开通IPV6端口，用于IPV6梯子
     firewall-cmd --permanent --add-rich-rule='rule family='ipv6' port protocol='tcp' port='39000-39099' accept'
-    firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=tcp:toport=80
-    firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=udp:toport=80
-    firewall-cmd --permanent --add-rich-rule='rule family='ipv6' forward-port port='39100-40000' to-port='80' protocol='tcp''
-    firewall-cmd --permanent --add-rich-rule='rule family='ipv6' forward-port port='39100-40000' to-port='80' protocol='udp''
+    firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=tcp:toport=81
+    firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=udp:toport=81
+    firewall-cmd --permanent --add-rich-rule='rule family='ipv6' forward-port port='39100-40000' to-port='81' protocol='tcp''
+    firewall-cmd --permanent --add-rich-rule='rule family='ipv6' forward-port port='39100-40000' to-port='81' protocol='udp''
     firewall-cmd --reload
     systemctl enable firewalld
      cat > /etc/security/limits.d/max.conf <<'EOF'
@@ -70,7 +71,7 @@ mkjson() {
     cat > /etc/shadowsocks-libev/config.json <<'EOF'
 {
     "server":["[::0]", "0.0.0.0"],
-    "server_port":80,
+    "server_port":81,
     "password":"BJ8E8o!A5rT&V!meig7ZeA^Ji^hL7%nR",
     "method":"aes-256-gcm",
     "fast_open":false,
@@ -104,8 +105,6 @@ net.ipv4.tcp_max_orphans = 262144
 enkey() {
     mkdir /root/.ssh
     echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK3nySoKInWCHtdS5SVCKdJXVoclWGumaYx9sm5YQBpG ed25519-key-20220506" >>/root/.ssh/authorized_keys
-    sed -i '/^PasswordAuthentication/s/^/#/g' /etc/ssh/sshd_config
-    sed -i '/PasswordAuthentication/a\PasswordAuthentication no' /etc/ssh/sshd_config
 }
 
 installss(){
