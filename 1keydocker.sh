@@ -105,6 +105,8 @@ net.ipv4.tcp_max_orphans = 262144
 enkey() {
     mkdir /root/.ssh
     echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK3nySoKInWCHtdS5SVCKdJXVoclWGumaYx9sm5YQBpG ed25519-key-20220506" >>/root/.ssh/authorized_keys
+    sed -i '/^PasswordAuthentication/s/^/#/g' /etc/ssh/sshd_config
+    sed -i '/PasswordAuthentication/a\PasswordAuthentication no' /etc/ssh/sshd_config
 }
 
 installss(){
