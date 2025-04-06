@@ -98,8 +98,8 @@ net.ipv4.tcp_max_syn_backlog = 262144
 net.core.netdev_max_backlog = 262144
 net.ipv4.tcp_max_orphans = 262144
 #增加UDP缓冲，防止缓冲不足，IPV6DNS更新错误
-net.core.rmem_max=7500000
-net.core.wmem_max=7500000
+net.core.rmem_max=25000000
+net.core.wmem_max=25000000
 " >> /etc/sysctl.d/ddos.conf
     echo "DDOS cfg finished"
 }
