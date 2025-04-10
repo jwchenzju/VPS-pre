@@ -41,8 +41,8 @@ cfgfirewall() {
 * hard nproc 131072
 * soft core unlimited
 * hard core unlimited
-* soft memlock 50000000
-* hard memlock 50000000
+* soft memlock 7500000
+* hard memlock 7500000
 EOF
     echo "firewalld configuration finished"
 }
@@ -97,9 +97,9 @@ net.ipv4.tcp_max_tw_buckets = 6000
 net.ipv4.tcp_max_syn_backlog = 262144
 net.core.netdev_max_backlog = 262144
 net.ipv4.tcp_max_orphans = 262144
-#增加UDP缓冲，防止缓冲不足，IPV6DNS更新错误
-net.core.rmem_max=25000000
-net.core.wmem_max=25000000
+#增加UDP缓冲，防止quic导致缓冲不足和IPV6DNS更新错误
+net.core.rmem_max=7500000
+net.core.wmem_max=7500000
 " >> /etc/sysctl.d/ddos.conf
     echo "DDOS cfg finished"
 }
