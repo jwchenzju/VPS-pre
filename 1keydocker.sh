@@ -100,6 +100,8 @@ net.ipv4.tcp_max_orphans = 262144
 #增加UDP缓冲，防止quic导致缓冲不足和IPV6DNS更新错误
 net.core.rmem_max=7500000
 net.core.wmem_max=7500000
+net.core.rmem_default = 7500000
+net.core.wmem_default = 7500000
 " >> /etc/sysctl.d/ddos.conf
     echo "DDOS cfg finished"
 }
