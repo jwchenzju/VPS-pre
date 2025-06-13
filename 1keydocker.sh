@@ -20,14 +20,11 @@ installbbr(){
 cfgfirewall() {
     systemctl start firewalld
     firewall-cmd --permanent --add-port=22/tcp
-    firewall-cmd --permanent --add-port=80/tcp
-    firewall-cmd --permanent --add-port=80/udp
-    firewall-cmd --permanent --add-port=39000-39030/tcp
-    firewall-cmd --permanent --add-port=39080-39090/tcp
-    firewall-cmd --permanent --add-port=39100-40000/tcp
+    firewall-cmd --permanent --add-port=81/tcp
+    firewall-cmd --permanent --add-port=81/udp
+    firewall-cmd --permanent --add-port=39000-40000/tcp
     firewall-cmd --permanent --add-port=1024-65535/udp
-    #39000-39099只开通IPV6端口，用于IPV6梯子
-    firewall-cmd --permanent --add-rich-rule='rule family='ipv6' port protocol='tcp' port='39000-39099' accept'
+    #端口转发
     firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=tcp:toport=81
     firewall-cmd --permanent --add-forward-port=port=39100-40000:proto=udp:toport=81
     firewall-cmd --permanent --add-rich-rule='rule family='ipv6' forward-port port='39100-40000' to-port='81' protocol='tcp''
