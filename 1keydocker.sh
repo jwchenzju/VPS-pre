@@ -20,8 +20,6 @@ installbbr(){
 cfgfirewall() {
     systemctl start firewalld
     firewall-cmd --permanent --add-port=22/tcp
-    firewall-cmd --permanent --add-port=81/tcp
-    firewall-cmd --permanent --add-port=81/udp
     firewall-cmd --permanent --add-port=39000-40000/tcp
     firewall-cmd --permanent --add-port=1024-65535/udp
     #端口转发
@@ -104,11 +102,12 @@ net.core.wmem_default = 7500000
 }
 
 #此项不要用！这是我个人的证书！
+#代码执行后要检查/etc/ssh/sshd
 enkey() {
     mkdir /root/.ssh
     echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK3nySoKInWCHtdS5SVCKdJXVoclWGumaYx9sm5YQBpG ed25519-key-20220506" >>/root/.ssh/authorized_keys
-    sed -i '/^PasswordAuthentication/s/^/#/g' /etc/ssh/sshd_config
-    sed -i '/PasswordAuthentication/a\PasswordAuthentication no' /etc/ssh/sshd_config
+    touch /etc/ssh/sshd_config.d/99-nopass.conf
+    echo "PasswordAuthentication no" >>/etc/ssh/sshd_config.d/99-nopass.conf
 }
 
 installss(){
